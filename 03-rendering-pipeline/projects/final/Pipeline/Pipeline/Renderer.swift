@@ -65,8 +65,7 @@ class Renderer: NSObject {
     let pipelineDescriptor = MTLRenderPipelineDescriptor()
     pipelineDescriptor.vertexFunction = vertexFunction
     pipelineDescriptor.fragmentFunction = fragmentFunction
-    pipelineDescriptor.vertexDescriptor =
-      MTKMetalVertexDescriptorFromModelIO(mdlMesh.vertexDescriptor)
+    pipelineDescriptor.vertexDescriptor = MTKMetalVertexDescriptorFromModelIO(mdlMesh.vertexDescriptor)
     pipelineDescriptor.colorAttachments[0].pixelFormat = metalView.colorPixelFormat
     do {
       pipelineState = try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
