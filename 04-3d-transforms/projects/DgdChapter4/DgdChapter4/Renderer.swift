@@ -56,16 +56,27 @@ class Renderer: NSObject {
         metalView.clearColor = MTLClearColor(red: 1.0, green: 1.0, blue: 0.8, alpha: 1.0)
         
         //this will be the NDC coords we use to draw the dot
-        vertices = [[float3(1.0, 0.0, 0.0)]]
+        //vertices = [[float3(0.0, 0.0, 0.5)]]
+        
+        
         
         //create a buffer on the gpu and fill with data??
          originalBuffer = Renderer.device.makeBuffer(bytes: &vertices, length: MemoryLayout<float3>.stride * vertices.count, options: [])
+        
+        //vertices[0] += [float3(0.3, -0.4, 0.5)]
+        vertices[0] += [0.3, -0.4, 0.5]
+        transformedBuffer = device.makeBuffer(bytes: &vertices, length: MemoryLayout<float3>.stride * vertices.count, options: [])
+        
+        
+        
+        
         
         //if we don't do this we won't hit our render loop below
         metalView.delegate = self
     }
     var originalBuffer: MTLBuffer!
-    var vertices:[[float3]]!
+    var transformedBuffer: MTLBuffer!
+    var vertices:[float3] = [float3(0.0, 0.0, 0.5)]
 }
 
 extension Renderer: MTKViewDelegate{
@@ -93,6 +104,10 @@ extension Renderer: MTKViewDelegate{
         //draw the point at index 0 and count = 1 at this point because we have an array of float3's
         renderEncoder.drawPrimitives(type: .point, vertexStart: 0, vertexCount: vertices.count)
         
+        renderEncoder.setVertexBuffer(transformedBuffer, offset: 0, index: 0)
+        var redColor:float4 = float4(1.0, 0.0, 0.0, 1.0)
+        renderEncoder.setFragmentBytes(&redColor, length: MemoryLayout<float4>.stride, index: 0)
+        renderEncoder.drawPrimitives(type: .point, vertexStart: 0, vertexCount: vertices.count)
         //we're done drawing with this encoder, can we do more draw commands with this single renderEncoder??
         renderEncoder.endEncoding()
         guard let drawable = view.currentDrawable else {
