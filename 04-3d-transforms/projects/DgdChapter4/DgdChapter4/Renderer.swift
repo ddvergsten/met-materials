@@ -64,7 +64,13 @@ class Renderer: NSObject {
          originalBuffer = Renderer.device.makeBuffer(bytes: &vertices, length: MemoryLayout<float3>.stride * vertices.count, options: [])
         
         //vertices[0] += [float3(0.3, -0.4, 0.5)]
-        vertices[0] += [0.3, -0.4, 0.5]
+        
+        
+//        vertices = vertices.map{
+//            let vertex = matrix * float4($0, 1)
+//            return [vertex.x, vertex.y, vertex.z]
+//        }
+        //vertices[0] += [0.3, -0.4, 0.5]
         transformedBuffer = device.makeBuffer(bytes: &vertices, length: MemoryLayout<float3>.stride * vertices.count, options: [])
         
         
@@ -91,10 +97,16 @@ extension Renderer: MTKViewDelegate{
             return
         }
         
+        var matrix1 = matrix_identity_float4x4
+        matrix1.columns.3 = [-0.3, 0.4, 0.0, 1.0]
+        
+        var matrix2 = matrix_identity_float4x4
+        matrix2.columns.3 = [0.3, -0.4, 0, 1]
+        
         //we setup the pipeline state in init, telling us what shaders to use and
         //and vertex descriptor format for the vertex shader
         renderEncoder.setRenderPipelineState(pipelineState)
-        
+        renderEncoder.setVertexBytes(&matrix1, length: MemoryLayout<float4x4>.stride, index: 1)
         //set the buffer with the actual data, ie vertices of the train model
         renderEncoder.setVertexBuffer(originalBuffer, offset: 0, index: 0)
         //set first argument of fragment shader to green color
@@ -104,6 +116,7 @@ extension Renderer: MTKViewDelegate{
         //draw the point at index 0 and count = 1 at this point because we have an array of float3's
         renderEncoder.drawPrimitives(type: .point, vertexStart: 0, vertexCount: vertices.count)
         
+        renderEncoder.setVertexBytes(&matrix2, length: MemoryLayout<float4x4>.stride, index: 1)
         renderEncoder.setVertexBuffer(transformedBuffer, offset: 0, index: 0)
         var redColor:float4 = float4(1.0, 0.0, 0.0, 1.0)
         renderEncoder.setFragmentBytes(&redColor, length: MemoryLayout<float4>.stride, index: 0)
