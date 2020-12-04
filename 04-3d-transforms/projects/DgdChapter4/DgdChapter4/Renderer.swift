@@ -80,6 +80,7 @@ class Renderer: NSObject {
         //if we don't do this we won't hit our render loop below
         metalView.delegate = self
     }
+    var angle:Float = 0.0
     var originalBuffer: MTLBuffer!
     var transformedBuffer: MTLBuffer!
     var vertices:[float3] = [
@@ -103,14 +104,18 @@ extension Renderer: MTKViewDelegate{
         
         var matrix1 = matrix_identity_float4x4
         //matrix1.columns.3 = [0.0, 0.0, 0.0, 1.0]
-        let scaleX: Float = 1.2
-        let scaleY: Float = 0.5
-        matrix1 = float4x4(
-            [scaleX, 0, 0, 0],
-            [0, scaleY, 0, 0],
-            [0, 0, 1, 0],
-            [0, 0, 0, 1]
-        )
+//        let scaleX: Float = 1.2
+//        let scaleY: Float = 0.5
+//        matrix1 = float4x4(
+//            [scaleX, 0, 0, 0],
+//            [0, scaleY, 0, 0],
+//            [0, 0, 1, 0],
+//            [0, 0, 0, 1]
+//        )
+        //let angle = Float.pi / 2.0
+        angle += 0.01
+        matrix1.columns.0 = [cos(angle), -sin(angle), 0, 0]
+        matrix1.columns.1 = [sin(angle), cos(angle), 0, 0]
         
 //        var matrix2 = matrix_identity_float4x4
 //        matrix2.columns.3 = [0.3, -0.4, 0, 1]
