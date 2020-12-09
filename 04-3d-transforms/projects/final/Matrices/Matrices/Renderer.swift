@@ -64,8 +64,7 @@ class Renderer: NSObject {
     vertexDescriptor.attributes[0].bufferIndex = 0
     
     vertexDescriptor.layouts[0].stride = MemoryLayout<SIMD3<Float>>.stride
-    let meshDescriptor =
-      MTKModelIOVertexDescriptorFromMetal(vertexDescriptor)
+    let meshDescriptor = MTKModelIOVertexDescriptorFromMetal(vertexDescriptor)
     (meshDescriptor.attributes[0] as! MDLVertexAttribute).name = MDLVertexAttributePosition
     
     let asset = MDLAsset(url: assetURL,
@@ -86,8 +85,7 @@ class Renderer: NSObject {
     let pipelineDescriptor = MTLRenderPipelineDescriptor()
     pipelineDescriptor.vertexFunction = vertexFunction
     pipelineDescriptor.fragmentFunction = fragmentFunction
-    pipelineDescriptor.vertexDescriptor =
-      MTKMetalVertexDescriptorFromModelIO(mdlMesh.vertexDescriptor)
+    pipelineDescriptor.vertexDescriptor = MTKMetalVertexDescriptorFromModelIO(mdlMesh.vertexDescriptor)
     pipelineDescriptor.colorAttachments[0].pixelFormat = metalView.colorPixelFormat
     do {
       pipelineState = try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
@@ -136,7 +134,7 @@ extension Renderer: MTKViewDelegate {
     renderEncoder.setRenderPipelineState(pipelineState)
     renderEncoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
     for submesh in mesh.submeshes {
-      renderEncoder.drawIndexedPrimitives(type: .triangle,
+      renderEncoder.drawIndexedPrimitives(type: .line,
                                           indexCount: submesh.indexCount,
                                           indexType: submesh.indexType,
                                           indexBuffer: submesh.indexBuffer.buffer,

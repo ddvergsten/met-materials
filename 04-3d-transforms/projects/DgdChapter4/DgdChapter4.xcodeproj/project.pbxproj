@@ -15,6 +15,7 @@
 		91CD7993256E89B700AE283C /* DgdChapter4UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91CD7992256E89B700AE283C /* DgdChapter4UITests.swift */; };
 		91CD79A4256E8ABF00AE283C /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91CD79A3256E8ABF00AE283C /* Renderer.swift */; };
 		91CD79A9256E8BCD00AE283C /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 91CD79A8256E8BCD00AE283C /* Shaders.metal */; };
+		91CD79BA258112B500AE283C /* MathLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91CD79B9258112B500AE283C /* MathLibrary.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,8 @@
 		91CD7994256E89B700AE283C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		91CD79A3256E8ABF00AE283C /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		91CD79A8256E8BCD00AE283C /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		91CD79B125810EE200AE283C /* Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
+		91CD79B9258112B500AE283C /* MathLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathLibrary.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +83,7 @@
 		91CD7968256E89B500AE283C = {
 			isa = PBXGroup;
 			children = (
+				91CD79B8258112A000AE283C /* Utility */,
 				91CD7973256E89B500AE283C /* DgdChapter4 */,
 				91CD7986256E89B700AE283C /* DgdChapter4Tests */,
 				91CD7991256E89B700AE283C /* DgdChapter4UITests */,
@@ -108,6 +112,7 @@
 				91CD797E256E89B600AE283C /* DgdChapter4.entitlements */,
 				91CD79A3256E8ABF00AE283C /* Renderer.swift */,
 				91CD79A8256E8BCD00AE283C /* Shaders.metal */,
+				91CD79B125810EE200AE283C /* Common.h */,
 			);
 			path = DgdChapter4;
 			sourceTree = "<group>";
@@ -128,6 +133,14 @@
 				91CD7994256E89B700AE283C /* Info.plist */,
 			);
 			path = DgdChapter4UITests;
+			sourceTree = "<group>";
+		};
+		91CD79B8258112A000AE283C /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				91CD79B9258112B500AE283C /* MathLibrary.swift */,
+			);
+			path = Utility;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -263,6 +276,7 @@
 				91CD7977256E89B500AE283C /* ViewController.swift in Sources */,
 				91CD79A4256E8ABF00AE283C /* Renderer.swift in Sources */,
 				91CD7975256E89B500AE283C /* AppDelegate.swift in Sources */,
+				91CD79BA258112B500AE283C /* MathLibrary.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -441,6 +455,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = rapidimagingtech.DgdChapter4;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = DgdChapter4/Common.h;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -462,6 +477,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = rapidimagingtech.DgdChapter4;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = DgdChapter4/Common.h;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

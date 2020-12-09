@@ -7,10 +7,12 @@
 
 import Foundation
 import MetalKit
+
 class Renderer: NSObject {
     static var device: MTLDevice!
     static var commandQueue: MTLCommandQueue!
     var pipelineState: MTLRenderPipelineState!
+    var uniforms = Uniforms()
     init(metalView: MTKView){
         guard let device = MTLCreateSystemDefaultDevice(),
               let commandQueue = device.makeCommandQueue() else{
@@ -19,7 +21,7 @@ class Renderer: NSObject {
         Renderer.device = device
         Renderer.commandQueue = commandQueue
         metalView.device = device
-        //let allocator = MTKMeshBufferAllocator(device: device)
+        
         let vertexDescriptor2 = MTLVertexDescriptor()
         vertexDescriptor2.attributes[0].format = .float3
         vertexDescriptor2.attributes[0].offset = 0
@@ -27,7 +29,6 @@ class Renderer: NSObject {
         
         //the stride of a vec3 of floats, xyz of position point we will send to vertexshader
         vertexDescriptor2.layouts[0].stride = MemoryLayout<SIMD3<Float>>.stride
-        
         
         let library = device.makeDefaultLibrary()
         let vertexFunction = library?.makeFunction(name: "vertex_main")
@@ -55,32 +56,19 @@ class Renderer: NSObject {
         
         metalView.clearColor = MTLClearColor(red: 1.0, green: 1.0, blue: 0.8, alpha: 1.0)
         
-        //this will be the NDC coords we use to draw the dot
-        //vertices = [[float3(0.0, 0.0, 0.5)]]
-        
-        
         
         //create a buffer on the gpu and fill with data??
          originalBuffer = Renderer.device.makeBuffer(bytes: &vertices, length: MemoryLayout<float3>.stride * vertices.count, options: [])
         
-        //vertices[0] += [float3(0.3, -0.4, 0.5)]
-        
-        
-//        vertices = vertices.map{
-//            let vertex = matrix * float4($0, 1)
-//            return [vertex.x, vertex.y, vertex.z]
-//        }
-        //vertices[0] += [0.3, -0.4, 0.5]
-        //transformedBuffer = device.makeBuffer(bytes: &vertices, length: MemoryLayout<float3>.stride * //vertices.count, options: [])
-        
-        
-        
-        
-        
         //if we don't do this we won't hit our render loop below
         metalView.delegate = self
+        
+        let translation = float4x4(translation: [0, 0.3, 0])
+        
+        let rotation = float4x4(rotation: [0, 0, Float(45).degreesToRadians])
+        uniforms.modelMatrix = translation * rotation
     }
-    var angle:Float = 0.0
+    var angle:Float = 90.0
     var originalBuffer: MTLBuffer!
     var transformedBuffer: MTLBuffer!
     var vertices:[float3] = [
@@ -103,27 +91,31 @@ extension Renderer: MTKViewDelegate{
         }
         
         var matrix1 = matrix_identity_float4x4
-        //matrix1.columns.3 = [0.0, 0.0, 0.0, 1.0]
-//        let scaleX: Float = 1.2
-//        let scaleY: Float = 0.5
-//        matrix1 = float4x4(
-//            [scaleX, 0, 0, 0],
-//            [0, scaleY, 0, 0],
-//            [0, 0, 1, 0],
-//            [0, 0, 0, 1]
-//        )
-        //let angle = Float.pi / 2.0
-        angle += 0.01
-        matrix1.columns.0 = [cos(angle), -sin(angle), 0, 0]
-        matrix1.columns.1 = [sin(angle), cos(angle), 0, 0]
         
-//        var matrix2 = matrix_identity_float4x4
-//        matrix2.columns.3 = [0.3, -0.4, 0, 1]
+        angle += 0.1
+        //matrix1.columns.0 = [cos(angle), -sin(angle), 0, 0]
+       // matrix1.columns.1 = [sin(angle), cos(angle), 0, 0]
+        var distanceVector = float4(vertices.last!.x,
+                                    vertices.last!.y,
+                                    vertices.last!.z, 1)
+        let translation = float4x4(translation: [0, 0.3, 0])
+        
+        let rotation = float4x4(rotation: [0, 0, Float(angle).degreesToRadians])
+        uniforms.modelMatrix = translation * rotation
+        
+        var translate = matrix_identity_float4x4
+        translate.columns.3 = distanceVector
+        var rotate = matrix_identity_float4x4
+        rotate.columns.0 = [cos(angle), -sin(angle), 0, 0]
+        rotate.columns.1 = [sin(angle), cos(angle), 0, 0]
+        
+        matrix1 = translate * rotate * translate.inverse
         
         //we setup the pipeline state in init, telling us what shaders to use and
         //and vertex descriptor format for the vertex shader
         renderEncoder.setRenderPipelineState(pipelineState)
-        renderEncoder.setVertexBytes(&matrix1, length: MemoryLayout<float4x4>.stride, index: 1)
+        //renderEncoder.setVertexBytes(&matrix1, length: MemoryLayout<float4x4>.stride, index: 1)
+        renderEncoder.setVertexBytes(&uniforms, length: MemoryLayout<Uniforms>.stride, index: 1)
         //set the buffer with the actual data, ie vertices of the train model
         renderEncoder.setVertexBuffer(originalBuffer, offset: 0, index: 0)
         //set first argument of fragment shader to green color
@@ -133,11 +125,6 @@ extension Renderer: MTKViewDelegate{
         //draw the point at index 0 and count = 1 at this point because we have an array of float3's
         renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: vertices.count)
         
-//        renderEncoder.setVertexBytes(&matrix2, length: MemoryLayout<float4x4>.stride, index: 1)
-//        renderEncoder.setVertexBuffer(transformedBuffer, offset: 0, index: 0)
-//        var redColor:float4 = float4(1.0, 0.0, 0.0, 1.0)
-//        renderEncoder.setFragmentBytes(&redColor, length: MemoryLayout<float4>.stride, index: 0)
-//        renderEncoder.drawPrimitives(type: .point, vertexStart: 0, vertexCount: vertices.count)
         //we're done drawing with this encoder, can we do more draw commands with this single renderEncoder??
         renderEncoder.endEncoding()
         guard let drawable = view.currentDrawable else {
