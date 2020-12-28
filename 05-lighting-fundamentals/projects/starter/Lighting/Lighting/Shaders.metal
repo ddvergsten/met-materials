@@ -36,17 +36,39 @@ using namespace metal;
 
 struct VertexIn {
   float4 position [[attribute(0)]];
+    float3 normal [[attribute(1)]];
 };
 
-vertex float4 vertex_main(const VertexIn vertexIn [[stage_in]],
+struct VertexOut{
+    float4 position[[position]];
+    float3 normal;
+};
+
+vertex VertexOut vertex_main(const VertexIn vertexIn [[stage_in]],
                           constant Uniforms &uniforms [[buffer(1)]])
 {
-  float4 position = uniforms.projectionMatrix * uniforms.viewMatrix
-  * uniforms.modelMatrix * vertexIn.position;
-  return position;
+    VertexOut out{
+        .position = uniforms.projectionMatrix * uniforms.viewMatrix * uniforms.modelMatrix * vertexIn.position,
+        .normal = vertexIn.normal
+    };
+    
+    return out;
+//  float4 position = uniforms.projectionMatrix * uniforms.viewMatrix
+//  * uniforms.modelMatrix * vertexIn.position;
+//  return position;
 }
 
-fragment float4 fragment_main() {
-  return float4(0, 0, 1, 1);
+fragment float4 fragment_main(VertexOut in[[stage_in]]) {
+    //the sky is green colored, the earth emits blue color
+    float4 sky = float4(0.0, 1.0, 0.0, 1.0);
+    float4 earth = float4(0.0, 0.0, 1.0, 1.0);
+    
+    //take the y of the normal and figure out which color to use between earth and sky.
+    //if the normal points down ie, the bottom of the train, intensity is 0, so the mix
+    //function returns the earth color.  if y is pointing straight up, then we get the sky color
+    float intensity = in.normal.y * 0.5 + 0.5;
+    return mix(earth, sky, intensity);
+    //return float4(in.normal, 1);
+  //return float4(0, 0, 1, 1);
 }
 

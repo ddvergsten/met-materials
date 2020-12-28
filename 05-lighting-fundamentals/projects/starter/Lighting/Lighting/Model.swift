@@ -60,8 +60,12 @@ class Model: Node {
     let vertexFunction = library?.makeFunction(name: "vertex_main")
     let fragmentFunction = library?.makeFunction(name: "fragment_main")
     
+    
     var pipelineState: MTLRenderPipelineState
     let pipelineDescriptor = MTLRenderPipelineDescriptor()
+    pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float
+    
+
     pipelineDescriptor.vertexFunction = vertexFunction
     pipelineDescriptor.fragmentFunction = fragmentFunction
     let vertexDescriptor = MDLVertexDescriptor.defaultVertexDescriptor

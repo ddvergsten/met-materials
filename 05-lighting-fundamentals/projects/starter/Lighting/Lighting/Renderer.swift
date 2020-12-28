@@ -55,17 +55,29 @@ class Renderer: NSObject {
     return buildLightPipelineState()
   }()
 
-  
+    static func buildDepthStencilState() -> MTLDepthStencilState?{
+        let descriptor = MTLDepthStencilDescriptor()
+        descriptor.depthCompareFunction = .less
+        descriptor.isDepthWriteEnabled = true
+        return Renderer.device.makeDepthStencilState(descriptor: descriptor)
+    }
+    let depthStencilState: MTLDepthStencilState
   init(metalView: MTKView) {
     guard
       let device = MTLCreateSystemDefaultDevice(),
       let commandQueue = device.makeCommandQueue() else {
         fatalError("GPU not available")
     }
+    
+    
+    
+    
     Renderer.device = device
+    depthStencilState = Renderer.buildDepthStencilState()!
     Renderer.commandQueue = commandQueue
     Renderer.library = device.makeDefaultLibrary()
     metalView.device = device
+    metalView.depthStencilPixelFormat = .depth32Float
     
     super.init()
     metalView.clearColor = MTLClearColor(red: 1.0, green: 1.0,
@@ -95,7 +107,7 @@ extension Renderer: MTKViewDelegate {
       commandBuffer.makeRenderCommandEncoder(descriptor: descriptor) else {
         return
     }
-    
+    renderEncoder.setDepthStencilState(depthStencilState)
     uniforms.projectionMatrix = camera.projectionMatrix
     uniforms.viewMatrix = camera.viewMatrix
     
