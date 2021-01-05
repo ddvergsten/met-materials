@@ -41,7 +41,8 @@ struct VertexIn {
 
 struct VertexOut{
     float4 position[[position]];
-    float3 normal;
+    float3 worldPosition;
+    float3 worldNormal;
 };
 
 vertex VertexOut vertex_main(const VertexIn vertexIn [[stage_in]],
@@ -49,7 +50,9 @@ vertex VertexOut vertex_main(const VertexIn vertexIn [[stage_in]],
 {
     VertexOut out{
         .position = uniforms.projectionMatrix * uniforms.viewMatrix * uniforms.modelMatrix * vertexIn.position,
-        .normal = vertexIn.normal
+        .worldPosition = (uniforms.modelMatrix * vertexIn.position).xyz,
+        .worldNormal = uniforms.normalMatrix * vertexIn.normal
+        //.normal = vertexIn.normal
     };
     
     return out;
@@ -58,16 +61,37 @@ vertex VertexOut vertex_main(const VertexIn vertexIn [[stage_in]],
 //  return position;
 }
 
-fragment float4 fragment_main(VertexOut in[[stage_in]]) {
-    //the sky is green colored, the earth emits blue color
-    float4 sky = float4(0.0, 1.0, 0.0, 1.0);
-    float4 earth = float4(0.0, 0.0, 1.0, 1.0);
+fragment float4 fragment_main(VertexOut in[[stage_in]],
+    constant Light *lights[[buffer(2)]],
+    constant FragmentUniforms &fragmentUniforms [[buffer(3)]]) {
+        
+    float3 baseColor = float3(0,0,1);
+    float3 diffuseColor = 0;
     
-    //take the y of the normal and figure out which color to use between earth and sky.
-    //if the normal points down ie, the bottom of the train, intensity is 0, so the mix
-    //function returns the earth color.  if y is pointing straight up, then we get the sky color
-    float intensity = in.normal.y * 0.5 + 0.5;
-    return mix(earth, sky, intensity);
+    //2
+    float3 normalDirection = normalize(in.worldNormal);
+    for(uint i = 0 ; i < fragmentUniforms.lightCount; i++){
+        Light light = lights[i];
+        if(light.type == Sunlight){
+            float3 lightDirection = normalize(-light.position);
+            float diffuseIntensity = saturate(-dot(lightDirection, normalDirection));
+            
+            diffuseColor += light.color * baseColor * diffuseIntensity;
+        }
+    }
+    
+    float3 color = diffuseColor;
+    return float4(color, 1);
+    
+    //the sky is green colored, the earth emits blue color
+//    float4 sky = float4(0.0, 1.0, 0.0, 1.0);
+//    float4 earth = float4(0.0, 0.0, 1.0, 1.0);
+//
+//    //take the y of the normal and figure out which color to use between earth and sky.
+//    //if the normal points down ie, the bottom of the train, intensity is 0, so the mix
+//    //function returns the earth color.  if y is pointing straight up, then we get the sky color
+//    float intensity = in.normal.y * 0.5 + 0.5;
+//    return mix(earth, sky, intensity);
     //return float4(in.normal, 1);
   //return float4(0, 0, 1, 1);
 }
