@@ -65,6 +65,8 @@ fragment float4 fragment_main(VertexOut in[[stage_in]],
     constant Light *lights[[buffer(2)]],
     constant FragmentUniforms &fragmentUniforms [[buffer(3)]]) {
         
+    float3 ambientColor = 0;
+    
     float3 baseColor = float3(0,0,1);
     float3 diffuseColor = 0;
     
@@ -77,10 +79,12 @@ fragment float4 fragment_main(VertexOut in[[stage_in]],
             float diffuseIntensity = saturate(-dot(lightDirection, normalDirection));
             
             diffuseColor += light.color * baseColor * diffuseIntensity;
+        }else if(light.type == Ambientlight){
+            ambientColor += light.color * light.intensity;
         }
     }
     
-    float3 color = diffuseColor;
+    float3 color = diffuseColor + ambientColor;
     return float4(color, 1);
     
     //the sky is green colored, the earth emits blue color

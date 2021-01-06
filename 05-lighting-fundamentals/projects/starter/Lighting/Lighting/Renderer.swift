@@ -95,7 +95,7 @@ class Renderer: NSObject {
     mtkView(metalView, drawableSizeWillChange: metalView.bounds.size)
     
     lights.append(sunlight)
-    
+    lights.append(ambientLight)
     fragmentUniforms.lightCount = UInt32(lights.count)
   }
     
@@ -112,6 +112,14 @@ class Renderer: NSObject {
     lazy var sunlight: Light = {
         var light = buildDefaultLight()
         light.position = [1,2,-2]
+        return light
+    }()
+    
+    lazy var ambientLight: Light = {
+        var light = buildDefaultLight()
+        light.color = [0.5, 1, 0]
+        light.intensity = 0.2
+        light.type = Ambientlight
         return light
     }()
     
