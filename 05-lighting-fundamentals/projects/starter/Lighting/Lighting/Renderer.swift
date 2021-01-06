@@ -97,6 +97,7 @@ class Renderer: NSObject {
     lights.append(sunlight)
     lights.append(ambientLight)
     fragmentUniforms.lightCount = UInt32(lights.count)
+    
   }
     
     func buildDefaultLight() -> Light{
@@ -143,6 +144,7 @@ extension Renderer: MTKViewDelegate {
     }
     renderEncoder.setDepthStencilState(depthStencilState)
     uniforms.projectionMatrix = camera.projectionMatrix
+    fragmentUniforms.cameraPosition = camera.position
     uniforms.viewMatrix = camera.viewMatrix
     
     renderEncoder.setFragmentBytes(&lights, length: MemoryLayout<Light>.stride * lights.count, index: 2)
