@@ -50,8 +50,6 @@
 		13EE060C22C5CA52008FC5D0 /* train.obj in Resources */ = {isa = PBXBuildFile; fileRef = 13EE060922C5CA52008FC5D0 /* train.obj */; };
 		13EE060D22C5CA52008FC5D0 /* train.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 13EE060A22C5CA52008FC5D0 /* train.mtl */; };
 		13EE060E22C5CA52008FC5D0 /* train.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 13EE060A22C5CA52008FC5D0 /* train.mtl */; };
-		91E6979025AC923F007EA3CD /* FindorffMadisonOfficeTest.obj in Resources */ = {isa = PBXBuildFile; fileRef = 91E6978F25AC923F007EA3CD /* FindorffMadisonOfficeTest.obj */; };
-		91E6979125AC923F007EA3CD /* FindorffMadisonOfficeTest.obj in Resources */ = {isa = PBXBuildFile; fileRef = 91E6978F25AC923F007EA3CD /* FindorffMadisonOfficeTest.obj */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -87,7 +85,6 @@
 		13A7ABC422C2374400609310 /* MathLibrary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MathLibrary.swift; sourceTree = "<group>"; };
 		13EE060922C5CA52008FC5D0 /* train.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = train.obj; sourceTree = "<group>"; };
 		13EE060A22C5CA52008FC5D0 /* train.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = train.mtl; sourceTree = "<group>"; };
-		91E6978F25AC923F007EA3CD /* FindorffMadisonOfficeTest.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FindorffMadisonOfficeTest.obj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,7 +148,6 @@
 		1384A39622C1DFC2006036BA /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				91E6978F25AC923F007EA3CD /* FindorffMadisonOfficeTest.obj */,
 				13EE060A22C5CA52008FC5D0 /* train.mtl */,
 				13EE060922C5CA52008FC5D0 /* train.obj */,
 				130F083B22C4424A001B7909 /* treefir.mtl */,
@@ -279,7 +275,6 @@
 				13EE060D22C5CA52008FC5D0 /* train.mtl in Resources */,
 				1384A37522C1B389006036BA /* Assets.xcassets in Resources */,
 				1384A37822C1B389006036BA /* Main.storyboard in Resources */,
-				91E6979025AC923F007EA3CD /* FindorffMadisonOfficeTest.obj in Resources */,
 				130F083E22C4424A001B7909 /* treefir.mtl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -291,7 +286,6 @@
 				1384A3E822C1F04D006036BA /* LaunchScreen.storyboard in Resources */,
 				13EE060E22C5CA52008FC5D0 /* train.mtl in Resources */,
 				1384A3E522C1F04D006036BA /* Assets.xcassets in Resources */,
-				91E6979125AC923F007EA3CD /* FindorffMadisonOfficeTest.obj in Resources */,
 				13EE060C22C5CA52008FC5D0 /* train.obj in Resources */,
 				130F083D22C4424A001B7909 /* treefir.obj in Resources */,
 				130F083F22C4424A001B7909 /* treefir.mtl in Resources */,
