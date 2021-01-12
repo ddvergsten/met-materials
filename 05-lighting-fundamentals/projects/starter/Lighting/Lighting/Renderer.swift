@@ -100,6 +100,8 @@ class Renderer: NSObject {
     
     lights.append(sunlight)
     lights.append(ambientLight)
+    lights.append(redLight)
+    
     fragmentUniforms.lightCount = UInt32(lights.count)
     
   }
@@ -125,6 +127,15 @@ class Renderer: NSObject {
         light.color = [0.5, 1, 0]
         light.intensity = 0.2
         light.type = Ambientlight
+        return light
+    }()
+    
+    lazy var redLight: Light = {
+        var light = buildDefaultLight()
+        light.position = [ -0, 0.5, -0.5]
+        light.color = [1, 0,0]
+        light.attenuation = float3(1,3,4)
+        light.type = Pointlight
         return light
     }()
     
@@ -180,7 +191,7 @@ extension Renderer: MTKViewDelegate {
       }
     }
 
-    debugLights(renderEncoder: renderEncoder, lightType: Sunlight)
+    debugLights(renderEncoder: renderEncoder, lightType: Pointlight)
     renderEncoder.endEncoding()
     guard let drawable = view.currentDrawable else {
       return
