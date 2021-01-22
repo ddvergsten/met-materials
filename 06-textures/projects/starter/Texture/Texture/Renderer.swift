@@ -73,10 +73,15 @@ class Renderer: NSObject {
 
     // models
     let house = Model(name: "lowpoly-house.obj")
+    house.tiling = 1
     house.position = [0, 0, 0]
     house.rotation = [0, Float(45).degreesToRadians, 0]
     models.append(house)
     
+    let ground = Model(name: "plane.obj")
+    ground.scale = [40,40,40]
+    ground.tiling = 16
+    models.append(ground)
     fragmentUniforms.lightCount = lighting.count
   }
   
@@ -117,15 +122,20 @@ extension Renderer: MTKViewDelegate {
     renderEncoder.setFragmentBytes(&lights,
                                    length: MemoryLayout<Light>.stride * lights.count,
                                    index: Int(BufferIndexLights.rawValue))
-    renderEncoder.setFragmentBytes(&fragmentUniforms,
-                                   length: MemoryLayout<FragmentUniforms>.stride,
-                                   index: Int(BufferIndexFragmentUniforms.rawValue))
-    
+//    renderEncoder.setFragmentBytes(&fragmentUniforms,
+//                                   length: MemoryLayout<FragmentUniforms>.stride,
+//                                   index: Int(BufferIndexFragmentUniforms.rawValue))
+//    renderEncoder.setFragmentBytes(&fragmentUniforms, length: MemoryLayout<FragmentUniforms>.stride, index: Int(BufferIndexFragmentUniforms.rawValue))
     // render all the models in the array
     for model in models {
       
       // add tiling here
 
+        fragmentUniforms.tiling = model.tiling
+        renderEncoder.setFragmentBytes(&fragmentUniforms,
+                                       length: MemoryLayout<FragmentUniforms>.stride,
+                                       index: Int(BufferIndexFragmentUniforms.rawValue))
+        
       uniforms.modelMatrix = model.modelMatrix
       uniforms.normalMatrix = uniforms.modelMatrix.upperLeft
       
@@ -143,7 +153,7 @@ extension Renderer: MTKViewDelegate {
         for submesh in mesh.submeshes {
           
           // set the fragment texture here
-          
+            renderEncoder.setFragmentTexture(submesh.textures.baseColor, index: Int(BaseColorTexture.rawValue))
           let mtkSubmesh = submesh.mtkSubmesh
           renderEncoder.drawIndexedPrimitives(type: .triangle,
                                               indexCount: mtkSubmesh.indexCount,

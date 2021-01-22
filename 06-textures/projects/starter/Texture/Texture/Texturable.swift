@@ -30,33 +30,29 @@
  */
 
 
-import ModelIO
+import MetalKit
 
-extension MDLVertexDescriptor {
-  static var defaultVertexDescriptor: MDLVertexDescriptor = {
-    let vertexDescriptor = MDLVertexDescriptor()
-    var offset = 0
-    
-    // position attribute
-    vertexDescriptor.attributes[Int(Position.rawValue)]
-      = MDLVertexAttribute(name: MDLVertexAttributePosition,
-                           format: .float3,
-                           offset: 0,
-                           bufferIndex: Int(BufferIndexVertices.rawValue))
-    offset += MemoryLayout<float3>.stride
+protocol Texturable{}
 
-    // normal attribute
-    vertexDescriptor.attributes[Int(Normal.rawValue)] =
-      MDLVertexAttribute(name: MDLVertexAttributeNormal,
-                         format: .float3,
-                         offset: offset,
-                         bufferIndex: Int(BufferIndexVertices.rawValue))
-    offset += MemoryLayout<float3>.stride
-
-    // add the uv attribute here
-    vertexDescriptor.attributes[Int(UV.rawValue)] = MDLVertexAttribute(name: MDLVertexAttributeTextureCoordinate, format: .float2, offset: offset, bufferIndex: Int(BufferIndexVertices.rawValue))
-    offset += MemoryLayout<float2>.stride
-    vertexDescriptor.layouts[0] = MDLVertexBufferLayout(stride: offset)
-    return vertexDescriptor
-  }()
+extension Texturable{
+    static func loadTexture(imageName: String) throws -> MTLTexture?
+    {
+        let textureLoader = MTKTextureLoader(device: Renderer.device)
+        
+//        let textureLoaderOptions: [MTKTextureLoader.Option: Any] = [.origin: MTKTextureLoader.Origin.bottomLeft]
+        
+        let textureLoaderOptions: [MTKTextureLoader.Option: Any] = [.origin: MTKTextureLoader.Origin.bottomLeft, .SRGB: false]
+        
+        let fileExtension = URL(fileURLWithPath: imageName).pathExtension.isEmpty ? "png": nil
+        
+        guard let url = Bundle.main.url(forResource: imageName, withExtension: fileExtension)
+        else{
+            print("Failed to load \(imageName)")
+            return nil;
+        }
+        let texture = try textureLoader.newTexture(URL: url, options: textureLoaderOptions)
+        print("loaded teture \(url.lastPathComponent)")
+        return texture
+    }
 }
+

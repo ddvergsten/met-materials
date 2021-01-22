@@ -32,7 +32,7 @@
 import MetalKit
 
 class Model: Node {
-  
+    var tiling: UInt32 = 1
   let pipelineState: MTLRenderPipelineState
   let meshes: [Mesh]
   

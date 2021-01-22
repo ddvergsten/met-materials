@@ -56,6 +56,8 @@
 		13EBBB3D22C6FAF200230D2B /* lowpoly-barn-color.png in Resources */ = {isa = PBXBuildFile; fileRef = 13EBBB2D22C6FAF200230D2B /* lowpoly-barn-color.png */; };
 		13EBBB3F22C6FDA500230D2B /* Lighting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13EBBB3E22C6FDA500230D2B /* Lighting.swift */; };
 		13EBBB4022C6FDA500230D2B /* Lighting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13EBBB3E22C6FDA500230D2B /* Lighting.swift */; };
+		91A49C7F25B5B5D50054D7F7 /* Texturable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A49C7E25B5B5D50054D7F7 /* Texturable.swift */; };
+		91A49C8225B5B5E80054D7F7 /* Texturable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A49C7E25B5B5D50054D7F7 /* Texturable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -94,6 +96,7 @@
 		13EBBB2A22C6FAF200230D2B /* lowpoly-house.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "lowpoly-house.mtl"; sourceTree = "<group>"; };
 		13EBBB2D22C6FAF200230D2B /* lowpoly-barn-color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "lowpoly-barn-color.png"; sourceTree = "<group>"; };
 		13EBBB3E22C6FDA500230D2B /* Lighting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lighting.swift; sourceTree = "<group>"; };
+		91A49C7E25B5B5D50054D7F7 /* Texturable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Texturable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +139,7 @@
 		1384A37122C1B388006036BA /* Texture */ = {
 			isa = PBXGroup;
 			children = (
+				91A49C7E25B5B5D50054D7F7 /* Texturable.swift */,
 				1384A38022C1B3C2006036BA /* ViewController.swift */,
 				1384A38822C1B53E006036BA /* Renderer.swift */,
 				1384A38C22C1BE70006036BA /* Shaders.metal */,
@@ -348,6 +352,7 @@
 				130F081222C4352D001B7909 /* Model.swift in Sources */,
 				13EBBB3F22C6FDA500230D2B /* Lighting.swift in Sources */,
 				130F081B22C436F9001B7909 /* VertexDescriptor.swift in Sources */,
+				91A49C7F25B5B5D50054D7F7 /* Texturable.swift in Sources */,
 				130F082A22C43C57001B7909 /* ViewControllerExtension.swift in Sources */,
 				130F080F22C434CF001B7909 /* Camera.swift in Sources */,
 				1384A38122C1B3C2006036BA /* ViewController.swift in Sources */,
@@ -365,6 +370,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91A49C8225B5B5E80054D7F7 /* Texturable.swift in Sources */,
 				130F081922C435A0001B7909 /* Submesh.swift in Sources */,
 				130F081322C4352D001B7909 /* Model.swift in Sources */,
 				13EBBB4022C6FDA500230D2B /* Lighting.swift in Sources */,
@@ -568,6 +574,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = CN7BT99T2B;
 				INFOPLIST_FILE = "Texture-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -587,6 +594,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = CN7BT99T2B;
 				INFOPLIST_FILE = "Texture-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
